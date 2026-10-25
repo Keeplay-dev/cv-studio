@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Gerador de Currículos | Crie seu currículo em Word em minutos</title>
+  <meta name="description" content="Preencha suas informações passo a passo, veja a prévia em tempo real e baixe seu currículo pronto em formato Word (.docx)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Gerador de Currículos">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+      </span>
+      <span>CV<strong>Studio</strong></span>
+    </a>
+    <div class="topbar-actions">
+      <span class="save-status" id="save-status"><span class="dot"></span><span class="hide-mobile">Salvo automaticamente</span></span>
+      <button class="btn ghost sm" id="btn-example" type="button"><span class="hide-mobile">Carregar </span>Exemplo</button>
+      <button class="btn ghost sm" id="btn-clear" type="button">Limpar</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- =================== FORMULÁRIO =================== -->
+    <section class="panel form-panel" aria-labelledby="page-title">
+      <div class="hero">
+        <h1 id="page-title">Monte seu currículo <span class="grad">em poucos passos</span></h1>
+        <p>Preencha as etapas abaixo. A prévia é atualizada em tempo real e, no final, você baixa o arquivo pronto em Word.</p>
+      </div>
+
+      <nav class="stepper" id="stepper" aria-label="Etapas">
+        <div class="stepper-track"><div class="stepper-fill" id="stepper-fill"></div></div>
+        <ol id="stepper-list"></ol>
+      </nav>
+
+      <form id="cv-form" novalidate autocomplete="on">
+        <!-- Etapa 1 -->
+        <fieldset class="step" data-step="0" data-title="Dados pessoais" data-icon="user">
+          <legend class="step-head"><span class="step-kicker">Etapa 1</span>Dados pessoais</legend>
+          <div class="grid">
+            <div class="field col-2">
+              <label for="nome">Nome completo <em>*</em></label>
+              <input id="nome" data-field="nome" type="text" placeholder="Ex.: Maria Souza da Silva" autocomplete="name" required />
+              <small class="err">Informe seu nome completo.</small>
+            </div>
+            <div class="field">
+              <label for="idade">Idade</label>
+              <input id="idade" data-field="idade" type="number" min="14" max="99" placeholder="Ex.: 24" />
+            </div>
+            <div class="field">
+              <label for="telefone">Telefone / WhatsApp <em>*</em></label>
+              <input id="telefone" data-field="telefone" data-mask="phone" type="tel" placeholder="(11) 90000-0000" autocomplete="tel" required />
+              <small class="err">Informe um telefone válido.</small>
+            </div>
+            <div class="field col-2">
+              <label for="email">E-mail <em>*</em></label>
+              <input id="email" data-field="email" type="email" placeholder="voce@email.com" autocomplete="email" required />
+              <small class="err">Informe um e-mail válido.</small>
+            </div>
+            <div class="field col-2">
+              <label for="endereco">Endereço</label>
+              <input id="endereco" data-field="endereco" type="text" placeholder="Rua, número – Bairro, Cidade" autocomplete="street-address" />
+            </div>
+            <div class="field">
+              <label for="cep">CEP</label>
+              <input id="cep" data-field="cep" data-mask="cep" type="text" inputmode="numeric" placeholder="00000-000" autocomplete="postal-code" />
+            </div>
+            <div class="field">
+              <label for="linkedin">LinkedIn / Portfólio <span class="opt">opcional</span></label>
+              <input id="linkedin" data-field="linkedin" type="text" placeholder="linkedin.com/in/voce" />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Etapa 2 -->
+        <fieldset class="step" data-step="1" data-title="Objetivo" data-icon="target">
+          <legend class="step-head"><span class="step-kicker">Etapa 2</span>Objetivo profissional</legend>
+          <div class="field">
+            <label for="objetivo">Qual vaga ou área você busca? <em>*</em></label>
+            <textarea id="objetivo" data-field="objetivo" rows="3" maxlength="300" placeholder="Ex.: Estágio em Informática | Suporte Técnico | T.I" required></textarea>
+            <div class="field-foot"><small class="err">Descreva seu objetivo.</small><span class="counter" data-for="objetivo"></span></div>
+          </div>
+          <p class="hint">Sugestões rápidas — clique para usar:</p>
+          <div class="chips" id="objetivo-sugestoes"></div>
+        </fieldset>
+
+        <!-- Etapa 3 -->
+        <fieldset class="step" data-step="2" data-title="Experiências" data-icon="briefcase">
+          <legend class="step-head"><span class="step-kicker">Etapa 3</span>Experiências profissionais</legend>
+          <p class="hint">Comece pela mais recente. Se ainda não tem experiência, pode pular esta etapa.</p>
+          <div class="list" data-list="experiencias"></div>
+          <button type="button" class="btn add" data-add="experiencias"><span>+</span> Adicionar experiência</button>
+        </fieldset>
+
+        <!-- Etapa 4 -->
+        <fieldset class="step" data-step="3" data-title="Formação" data-icon="cap">
+          <legend class="step-head"><span class="step-kicker">Etapa 4</span>Formação acadêmica</legend>
+          <div class="list" data-list="formacoes"></div>
+          <button type="button" class="btn add" data-add="formacoes"><span>+</span> Adicionar formação</button>
+        </fieldset>
+
+        <!-- Etapa 5 -->
+        <fieldset class="step" data-step="4" data-title="Cursos" data-icon="award">
+          <legend class="step-head"><span class="step-kicker">Etapa 5</span>Atividades extracurriculares</legend>
+          <p class="hint">Cursos livres, certificações, monitorias, representações de sala, etc.</p>
+          <div class="list" data-list="cursos"></div>
+          <button type="button" class="btn add" data-add="cursos"><span>+</span> Adicionar atividade</button>
+        </fieldset>
+
+        <!-- Etapa 6 -->
+        <fieldset class="step" data-step="5" data-title="Habilidades" data-icon="spark">
+          <legend class="step-head"><span class="step-kicker">Etapa 6</span>Habilidades e idiomas</legend>
+          <div class="field">
+            <label for="skill-input">Habilidades</label>
+            <div class="tag-input" id="tag-box">
+              <div class="tags" id="tags"></div>
+              <input id="skill-input" type="text" placeholder="Digite e pressione Enter" />
+            </div>
+            <small class="muted">Pressione <kbd>Enter</kbd> ou <kbd>,</kbd> para adicionar. Clique numa tag para remover.</small>
+          </div>
+          <p class="hint">Sugestões:</p>
+          <div class="chips" id="skill-sugestoes"></div>
+
+          <div class="sub-head">Idiomas <span class="opt">opcional</span></div>
+          <div class="list" data-list="idiomas"></div>
+          <button type="button" class="btn add" data-add="idiomas"><span>+</span> Adicionar idioma</button>
+        </fieldset>
+
+        <!-- Etapa 7 -->
+        <fieldset class="step" data-step="6" data-title="Voluntariado" data-icon="heart">
+          <legend class="step-head"><span class="step-kicker">Etapa 7</span>Trabalho voluntário</legend>
+          <p class="hint">Opcional, mas conta muitos pontos com recrutadores.</p>
+          <div class="list" data-list="voluntarios"></div>
+          <button type="button" class="btn add" data-add="voluntarios"><span>+</span> Adicionar trabalho voluntário</button>
+        </fieldset>
+
+        <!-- Etapa 8 -->
+        <fieldset class="step" data-step="7" data-title="Baixar" data-icon="download">
+          <legend class="step-head"><span class="step-kicker">Etapa final</span>Tudo pronto!</legend>
+          <div class="finish">
+            <div class="score">
+              <svg viewBox="0 0 120 120" class="ring">
+                <circle cx="60" cy="60" r="52" class="ring-bg" />
+                <circle cx="60" cy="60" r="52" class="ring-fg" id="ring-fg" />
+              </svg>
+              <div class="score-txt"><strong id="score-num">0%</strong><span>completo</span></div>
+            </div>
+            <ul class="checklist" id="checklist"></ul>
+          </div>
+          <div class="field filename-field" style="margin-top: 1.5rem;">
+            <label for="custom-filename">Nome base do arquivo</label>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <input id="custom-filename" type="text" placeholder="CV_PESSOA_CARGO" spellcheck="false" />
+              <button type="button" class="btn ghost sm" id="btn-reset-filename" title="Restaurar padrão CV_PESSOA_CARGO">Padrão</button>
+            </div>
+            <small class="muted" id="file-name-hint">Padrão: <code>CV_PESSOA_CARGO</code></small>
+          </div>
+
+          <div class="download-grid">
+            <button type="button" class="btn primary xl" id="btn-download">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+              Baixar Word (.docx)
+            </button>
+            <button type="button" class="btn secondary xl btn-pdf" id="btn-pdf">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Gerar PDF (.pdf)
+            </button>
+          </div>
+          <p class="muted center" style="margin-top: 0.8rem; font-size: 0.85rem;">
+            O PDF é gerado em alta resolução vetorial (A4), com texto selecionável e compatível com sistemas de RH (ATS).
+          </p>
+        </fieldset>
+
+        <div class="nav-buttons">
+          <button type="button" class="btn ghost" id="btn-prev">← Voltar</button>
+          <button type="button" class="btn primary" id="btn-next">Próximo →</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- =================== PRÉVIA =================== -->
+    <aside class="panel preview-panel" id="preview-panel" aria-label="Prévia do currículo">
+      <div class="preview-head">
+        <span class="live"><span class="pulse"></span>Prévia ao vivo</span>
+        <div class="preview-tools" style="display: flex; align-items: center; gap: 0.6rem;">
+          <button type="button" class="btn ghost sm" id="btn-quick-pdf" title="Gerar PDF do currículo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px; margin-right: 4px;"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            PDF
+          </button>
+          <div class="zoom">
+            <button type="button" class="icon-btn" id="zoom-out" aria-label="Diminuir zoom">−</button>
+            <span id="zoom-label">100%</span>
+            <button type="button" class="icon-btn" id="zoom-in" aria-label="Aumentar zoom">+</button>
+          </div>
+        </div>
+        <button type="button" class="icon-btn close-preview" id="close-preview" aria-label="Fechar prévia">✕</button>
+      </div>
+      <div class="paper-wrap" id="paper-wrap">
+        <article class="paper" id="paper"></article>
+      </div>
+    </aside>
+  </main>
+
+  <button type="button" class="fab" id="open-preview" aria-label="Ver prévia">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    Prévia
+  </button>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- =================== TEMPLATES DE ITENS =================== -->
+  <template id="tpl-experiencias">
+    <div class="item">
+      <div class="item-head"><span class="item-title" data-title-from="empresa" data-fallback="Nova experiência"></span><div class="item-tools"></div></div>
+      <div class="grid">
+        <div class="field"><label>Empresa</label><input data-key="empresa" type="text" placeholder="Nome da empresa" /></div>
+        <div class="field"><label>Cargo</label><input data-key="cargo" type="text" placeholder="Ex.: Técnico em Informática" /></div>
+        <div class="field"><label>Período</label><input data-key="periodo" type="text" placeholder="Ex.: 1 ano e 2 meses / 03/2022 – 05/2023" /></div>
+        <div class="field switch-field"><label class="switch"><input data-key="atual" type="checkbox" /><span class="slider"></span><span>Trabalho aqui atualmente</span></label></div>
+        <div class="field col-2"><label>Funções / atividades</label><textarea data-key="funcoes" rows="3" placeholder="Descreva suas responsabilidades e conquistas."></textarea></div>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-formacoes">
+    <div class="item">
+      <div class="item-head"><span class="item-title" data-title-from="curso" data-fallback="Nova formação"></span><div class="item-tools"></div></div>
+      <div class="grid">
+        <div class="field col-2"><label>Curso</label><input data-key="curso" type="text" placeholder="Ex.: Informática para Negócios / Ensino Médio" /></div>
+        <div class="field"><label>Instituição</label><input data-key="instituicao" type="text" placeholder="Ex.: FATEC" /></div>
+        <div class="field"><label>Situação</label><input data-key="status" type="text" list="status-list" placeholder="Ex.: Cursando 5° Semestre" /></div>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-cursos">
+    <div class="item compact">
+      <div class="item-head"><span class="item-title" data-title-from="nome" data-fallback="Nova atividade"></span><div class="item-tools"></div></div>
+      <div class="grid g3">
+        <div class="field"><label>Atividade / curso</label><input data-key="nome" type="text" placeholder="Ex.: Pacote Office" /></div>
+        <div class="field"><label>Instituição</label><input data-key="instituicao" type="text" placeholder="Ex.: Fundação Bradesco" /></div>
+        <div class="field"><label>Data</label><input data-key="data" type="text" placeholder="Ex.: 11.2023" /></div>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-idiomas">
+    <div class="item compact">
+      <div class="item-head"><span class="item-title" data-title-from="idioma" data-fallback="Novo idioma"></span><div class="item-tools"></div></div>
+      <div class="grid">
+        <div class="field"><label>Idioma</label><input data-key="idioma" type="text" placeholder="Ex.: Inglês" /></div>
+        <div class="field"><label>Nível</label>
+          <select data-key="nivel">
+            <option value="">Selecione…</option>
+            <option>Básico</option><option>Intermediário</option><option>Avançado</option><option>Fluente</option><option>Nativo</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-voluntarios">
+    <div class="item">
+      <div class="item-head"><span class="item-title" data-title-from="titulo" data-fallback="Novo trabalho voluntário"></span><div class="item-tools"></div></div>
+      <div class="grid">
+        <div class="field"><label>Título / ação</label><input data-key="titulo" type="text" placeholder="Ex.: Ajuda Comunitária e Ação Social" /></div>
+        <div class="field"><label>Data</label><input data-key="data" type="text" placeholder="Ex.: 04/05/2024" /></div>
+        <div class="field col-2"><label>Tarefas</label><textarea data-key="tarefas" rows="3" placeholder="O que você fez?"></textarea></div>
+      </div>
+    </div>
+  </template>
+
+  <datalist id="status-list">
+    <option value="Concluído"></option>
+    <option value="Cursando"></option>
+    <option value="Cursando 1° Semestre"></option>
+    <option value="Trancado"></option>
+    <option value="Previsão de conclusão: 2027"></option>
+  </datalist>
+
+  <script src="js/zip.js"></script>
+  <script src="js/docx.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
