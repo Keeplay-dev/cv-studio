@@ -26,7 +26,7 @@ O **CVStudio** é uma aplicação web desenvolvida para solucionar um dos maiore
 
 Enquanto ferramentas de design convencionais priorizam layouts complexos que quebram a leitura de algoritmos (como Gupy, Kenoby, Workday e Greenhouse), o **CVStudio** combina uma interface de edição fluida (**Live Preview**) com um motor de geração de documentos estritamente alinhado às diretrizes exigidas por recrutadores e comunidades de Recursos Humanos.
 
-🔗 **Link do Repositório:** [github.com/Keeplay-dev/CVStudio](https://github.com/Keeplay-dev/cs-studio)  
+🔗 **Link do Repositório:** [github.com/Keeplay-dev/CVStudio](https://github.com/Keeplay-dev/cv-studio)  
 🌐 **Demonstração Online (Deploy):** https://cv-studio-zeta-lac.vercel.app/
 
 ---
