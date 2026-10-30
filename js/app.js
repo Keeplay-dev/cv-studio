@@ -120,7 +120,14 @@
   function load() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (saved && typeof saved === 'object') return { ...blankState(), ...saved };
+      if (saved && typeof saved === 'object') {
+        // Se continha o exemplo de demonstração pré-carregado, limpa para iniciar em branco
+        if (saved.nome === EXAMPLE.nome || saved.email === EXAMPLE.email) {
+          localStorage.removeItem(STORAGE_KEY);
+          return blankState();
+        }
+        return { ...blankState(), ...saved };
+      }
     } catch { /* ignora dados corrompidos */ }
     return blankState();
   }
@@ -331,13 +338,40 @@
   function renderPreview() {
     const s = state;
     let h = '';
-    h += `<div class="cv-name ${has(s.nome) ? '' : 'ph'}" data-sec="dados">${esc((s.nome || 'Seu nome completo').toUpperCase())}</div>`;
+
+    const hasAnyContent = has(s.nome) || has(s.telefone) || has(s.email) || has(s.endereco) || has(s.objetivo) ||
+      s.experiencias.some((e) => has(e.empresa) || has(e.cargo)) ||
+      s.formacoes.some((f) => has(f.curso) || has(f.instituicao)) ||
+      s.cursos.some((c) => has(c.nome)) ||
+      s.habilidades.length > 0 ||
+      s.idiomas.some((x) => has(x.idioma)) ||
+      s.voluntarios.some((v) => has(v.titulo));
+
+    if (!hasAnyContent) {
+      $('#paper').innerHTML = `
+        <div class="empty-paper-notice">
+          <div class="empty-paper-badge">FOLHA EM BRANCO</div>
+          <div class="empty-paper-title">Nenhuma informação preenchida ainda</div>
+          <p class="empty-paper-desc">Preencha seus dados reais no formulário ao lado. Conforme você digita, a diagramação do currículo é gerada aqui em tempo real.</p>
+        </div>`;
+      applyZoom();
+      return;
+    }
+
+    if (has(s.nome)) {
+      h += `<div class="cv-name" data-sec="dados">${esc(s.nome.toUpperCase())}</div>`;
+    }
+
     const endereco = [s.endereco, has(s.cep) ? `CEP: ${s.cep}` : ''].filter(has).join(', ');
     const contato = joinP([has(s.idade) ? `Idade: ${s.idade} anos` : '', endereco, s.telefone, s.email, s.linkedin]);
-    h += `<div class="cv-contact ${contato ? '' : 'ph'}" data-sec="dados">${contato || 'Idade  |  Endereço, CEP  |  Telefone  |  E-mail'}</div>`;
+    if (contato) {
+      h += `<div class="cv-contact" data-sec="dados">${contato}</div>`;
+    }
 
-    h += `<div data-sec="objetivo"><div class="cv-section">Objetivo</div>
-      <p class="cv-p ${has(s.objetivo) ? '' : 'ph'}">${has(s.objetivo) ? esc(s.objetivo) : 'Descreva a vaga ou área que você busca…'}</p></div>`;
+    if (has(s.objetivo)) {
+      h += `<div data-sec="objetivo"><div class="cv-section">Objetivo</div>
+        <p class="cv-p">${esc(s.objetivo)}</p></div>`;
+    }
 
     const exps = s.experiencias.filter((e) => has(e.empresa) || has(e.cargo));
     if (exps.length) {
@@ -701,7 +735,7 @@
     $('#btn-reset-filename')?.addEventListener('click', () => {
       customFilenameTouched = false;
       updateFilenameUI();
-      toast('Nome redefinido para o padrão CV_PESSOA_CARGO', 'success');
+      toast('Nome redefinido para o padrão automático', 'success');
     });
 
     $('#btn-example').addEventListener('click', () => {
@@ -738,7 +772,38 @@
       });
     });
     $('#close-preview').addEventListener('click', () => $('#preview-panel').classList.remove('open'));
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') $('#preview-panel').classList.remove('open'); });
+
+    // ---------- Tela de Boas-Vindas ----------
+    const welcomeModal = $('#welcome-modal');
+    const closeWelcome = () => {
+      if (welcomeModal) {
+        welcomeModal.classList.remove('active');
+        const nomeInput = $('#nome');
+        if (nomeInput && !nomeInput.value) {
+          setTimeout(() => nomeInput.focus(), 150);
+        }
+      }
+    };
+    const openWelcome = () => {
+      if (welcomeModal) welcomeModal.classList.add('active');
+    };
+
+    $('#btn-enter-site')?.addEventListener('click', closeWelcome);
+    $('#welcome-close-btn')?.addEventListener('click', closeWelcome);
+    $('#btn-about')?.addEventListener('click', openWelcome);
+    welcomeModal?.addEventListener('click', (e) => {
+      if (e.target === welcomeModal) closeWelcome();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (welcomeModal?.classList.contains('active')) {
+          closeWelcome();
+        } else {
+          $('#preview-panel').classList.remove('open');
+        }
+      }
+    });
   }
 
   // ---------- Init ---------------------------------------------------------

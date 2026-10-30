@@ -11,21 +11,54 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <div class="bg" aria-hidden="true">
-    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
-    <div class="grid-overlay"></div>
+  <div class="bg" aria-hidden="true"></div>
+
+  <!-- =================== TELA DE BOAS-VINDAS =================== -->
+  <div class="welcome-overlay active" id="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+    <div class="welcome-card">
+      <button type="button" class="welcome-close" id="welcome-close-btn" aria-label="Fechar tela de boas-vindas">✕</button>
+      
+      <div class="welcome-tag">PADRÃO ATS &amp; RECRUTAMENTO</div>
+
+      <h2 id="welcome-title" class="welcome-title">
+        Currículos formatados para passar pelos <span class="text-red">filtros de IA</span> e pelos olhos dos recrutadores.
+      </h2>
+
+      <div class="welcome-body">
+        <p>
+          Muitos currículos são descartados antes mesmo de chegar a uma pessoa porque sistemas de triagem por Inteligência Artificial (ATS) não conseguem ler tabelas complexas, colunas travadas ou fontes inadequadas.
+        </p>
+        <p>
+          Este gerador cria seu currículo nos <strong>padrões técnicos exatos exigidos por filtros automáticos de vagas</strong> e com a <strong>estética limpa e objetiva que recrutadores profissionais seguem como modelo</strong>: hierarquia direta, tipografia sóbria e informações essenciais localizáveis em segundos.
+        </p>
+      </div>
+
+      <div class="welcome-action">
+        <button type="button" class="btn primary xl welcome-btn" id="btn-enter-site">
+          <span>Acessar o Gerador</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <footer class="welcome-footer">
+        <div class="author-info-line">
+          <span class="author-name">Feito por <strong>Rafael Furgeri</strong></span>
+          <span class="author-sep">•</span>
+          <span class="author-course">5º semestre de Informática para Negócios</span>
+        </div>
+      </footer>
+    </div>
   </div>
 
   <header class="topbar">
     <a class="brand" href="#" aria-label="Gerador de Currículos">
-      <span class="brand-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>
-      </span>
-      <span>CV<strong>Studio</strong></span>
+      <span class="brand-mark">CV</span>
+      <span class="brand-text">CV<strong>Studio</strong></span>
     </a>
     <div class="topbar-actions">
       <span class="save-status" id="save-status"><span class="dot"></span><span class="hide-mobile">Salvo automaticamente</span></span>
-      <button class="btn ghost sm" id="btn-example" type="button"><span class="hide-mobile">Carregar </span>Exemplo</button>
+      <button class="btn ghost sm" id="btn-about" type="button" title="Sobre o projeto">Sobre</button>
+      <button class="btn ghost sm" id="btn-example" type="button" title="Carregar exemplo opcional"><span class="hide-mobile">Preencher </span>Exemplo</button>
       <button class="btn ghost sm" id="btn-clear" type="button">Limpar</button>
     </div>
   </header>
@@ -34,8 +67,8 @@
     <!-- =================== FORMULÁRIO =================== -->
     <section class="panel form-panel" aria-labelledby="page-title">
       <div class="hero">
-        <h1 id="page-title">Monte seu currículo <span class="grad">em poucos passos</span></h1>
-        <p>Preencha as etapas abaixo. A prévia é atualizada em tempo real e, no final, você baixa o arquivo pronto em Word.</p>
+        <h1 id="page-title">Monte seu currículo <span class="text-red">profissional</span></h1>
+        <p>Preencha os dados abaixo. Sua prévia é atualizada em tempo real e você baixa o arquivo pronto em Word (.docx) ou PDF.</p>
       </div>
 
       <nav class="stepper" id="stepper" aria-label="Etapas">
@@ -160,10 +193,10 @@
           <div class="field filename-field" style="margin-top: 1.5rem;">
             <label for="custom-filename">Nome base do arquivo</label>
             <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <input id="custom-filename" type="text" placeholder="CV_PESSOA_CARGO" spellcheck="false" />
-              <button type="button" class="btn ghost sm" id="btn-reset-filename" title="Restaurar padrão CV_PESSOA_CARGO">Padrão</button>
+              <input id="custom-filename" type="text" placeholder="CV_SEUNOME_CARGO" spellcheck="false" />
+              <button type="button" class="btn ghost sm" id="btn-reset-filename" title="Restaurar padrão automático">Padrão</button>
             </div>
-            <small class="muted" id="file-name-hint">Padrão: <code>CV_PESSOA_CARGO</code></small>
+            <small class="muted" id="file-name-hint">Gerado automaticamente com seu nome e objetivo</small>
           </div>
 
           <div class="download-grid">

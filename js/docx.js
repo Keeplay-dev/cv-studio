@@ -210,9 +210,9 @@ const DocxBuilder = (() => {
     return chosen.join('_');
   }
 
-  /** Nome de arquivo no padrão CV_PESSOA_CARGO.docx */
+  /** Nome de arquivo no padrão CV_NOME_CARGO.docx */
   function fileName(data) {
-    const pessoa = cleanSlug(data?.nome, 4) || 'PESSOA';
+    const pessoa = cleanSlug(data?.nome, 4);
 
     let cargoRaw = '';
     if (data?.objetivo && typeof data.objetivo === 'string') {
@@ -224,8 +224,11 @@ const DocxBuilder = (() => {
       if (exp) cargoRaw = exp.cargo.trim();
     }
 
-    const cargo = cleanSlug(cargoRaw, 4) || 'CARGO';
-    return `CV_${pessoa}_${cargo}.docx`;
+    const cargo = cleanSlug(cargoRaw, 4);
+    if (pessoa && cargo) return `CV_${pessoa}_${cargo}.docx`;
+    if (pessoa) return `CV_${pessoa}.docx`;
+    if (cargo) return `CV_${cargo}.docx`;
+    return 'Curriculo.docx';
   }
 
   return { build, fileName, documentXml };
