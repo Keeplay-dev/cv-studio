@@ -62,6 +62,13 @@
           <span class="author-sep" aria-hidden="true">/</span>
           <span class="author-course">5º semestre de Informática para Negócios</span>
         </div>
+        <nav class="welcome-links" aria-label="Informações institucionais">
+          <a href="#sobre" data-open-info="sobre">Sobre</a>
+          <span aria-hidden="true">·</span>
+          <a href="#contato" data-open-info="contato">Contato</a>
+          <span aria-hidden="true">·</span>
+          <a href="#privacidade" data-open-info="privacidade">Política de Privacidade</a>
+        </nav>
       </footer>
     </div>
   </div>
@@ -82,7 +89,15 @@
         <span class="dot"></span>
         <span class="hide-mobile" id="save-label">Salvo no navegador</span>
       </span>
-      <button class="btn ghost sm" id="btn-about" type="button" title="Sobre o projeto">Sobre</button>
+
+      <nav class="topbar-nav" aria-label="Institucional">
+        <a class="nav-link" href="#sobre" data-open-info="sobre" id="btn-about">Sobre</a>
+        <a class="nav-link hide-compact" href="#contato" data-open-info="contato">Contato</a>
+        <a class="nav-link hide-compact" href="#privacidade" data-open-info="privacidade">Privacidade</a>
+      </nav>
+
+      <span class="topbar-sep hide-compact" aria-hidden="true"></span>
+
       <button class="btn ghost sm" id="btn-example" type="button" title="Preencher com dados de exemplo">
         <span class="hide-mobile">Ver </span>Exemplo
       </button>
@@ -322,6 +337,150 @@
       </div>
     </aside>
   </main>
+
+  <!-- =================== RODAPÉ INSTITUCIONAL =================== -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand-info">
+        <span class="footer-brand">CV<strong>Studio</strong></span>
+        <span class="footer-dot" aria-hidden="true">·</span>
+        <span>Desenvolvido por <strong>Rafael Furgeri</strong> — Informática para Negócios</span>
+      </div>
+      <nav class="footer-nav" aria-label="Links institucionais">
+        <a href="#sobre" data-open-info="sobre">Sobre</a>
+        <a href="#contato" data-open-info="contato">Contato</a>
+        <a href="#privacidade" data-open-info="privacidade">Política de Privacidade</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- =================== MODAL INSTITUCIONAL (SOBRE / CONTATO / PRIVACIDADE) =================== -->
+  <div class="info-overlay" id="info-modal" role="dialog" aria-modal="true" aria-labelledby="info-modal-heading">
+    <div class="info-card">
+      <div class="info-card-head">
+        <div class="info-head-top">
+          <span class="info-kicker" id="info-modal-heading">CV Studio · Institucional</span>
+          <button type="button" class="welcome-close" id="info-close-btn" aria-label="Fechar janela">✕</button>
+        </div>
+        <div class="info-tabs" role="tablist" aria-label="Seções institucionais">
+          <button type="button" class="info-tab active" role="tab" id="tab-btn-sobre" aria-selected="true" aria-controls="panel-sobre" data-info-tab="sobre">Sobre</button>
+          <button type="button" class="info-tab" role="tab" id="tab-btn-contato" aria-selected="false" aria-controls="panel-contato" data-info-tab="contato">Contato</button>
+          <button type="button" class="info-tab" role="tab" id="tab-btn-privacidade" aria-selected="false" aria-controls="panel-privacidade" data-info-tab="privacidade">Política de Privacidade</button>
+        </div>
+      </div>
+
+      <div class="info-card-body" id="info-card-body">
+        <!-- ABA: SOBRE -->
+        <section class="info-panel active" role="tabpanel" id="panel-sobre" aria-labelledby="tab-btn-sobre" data-info-panel="sobre">
+          <h3>Sobre o CV Studio</h3>
+          <p>
+            O <strong>CV Studio</strong> nasceu com uma proposta direta: ajudar estudantes, candidatos ao primeiro emprego, estagiários e profissionais em transição a montarem um currículo bem estruturado, gratuito e sem armadilhas de formatação.
+          </p>
+          <p>
+            Muitas ferramentas online exigem cadastro obrigatório ou cobram assinatura na última etapa apenas para liberar o download do arquivo. Aqui, todo o processo acontece de forma aberta, sem marcas d'água e com exportação imediata tanto em formato editável do Microsoft Word (<code>.docx</code>) quanto em PDF A4.
+          </p>
+
+          <h4>Objetivos do projeto</h4>
+          <ul class="info-list">
+            <li>
+              <strong>Compatibilidade com triagem automática (ATS):</strong> plataformas utilizadas por setores de RH costumam descartar ou embaralhar currículos cheios de colunas laterais, gráficos de barras e tabelas ocultas. O modelo gerado segue diagramação linear limpa e semântica.
+            </li>
+            <li>
+              <strong>Leitura rápida por recrutadores:</strong> tipografia sóbria (família Calibri/Carlito), margens padronizadas e seções bem delimitadas permitem localizar objetivo, formação, experiências e competências em poucos segundos.
+            </li>
+            <li>
+              <strong>Autonomia para o candidato:</strong> possibilidade de escolher entre títulos no azul tradicional ou documento inteiramente em preto, além de editar o arquivo <code>.docx</code> livremente depois de baixar.
+            </li>
+          </ul>
+
+          <div class="info-callout">
+            <strong>Autoria acadêmica</strong>
+            <p>
+              Projeto idealizado e desenvolvido por <strong>Rafael Furgeri</strong>, estudante do 5º semestre do curso de <strong>Informática para Negócios</strong>, unindo desenvolvimento web e utilidade prática para quem busca espaço no mercado de trabalho.
+            </p>
+          </div>
+        </section>
+
+        <!-- ABA: CONTATO -->
+        <section class="info-panel" role="tabpanel" id="panel-contato" aria-labelledby="tab-btn-contato" data-info-panel="contato" hidden>
+          <h3>Contato</h3>
+          <p>
+            Tem alguma sugestão de melhoria para o gerador, encontrou algum detalhe de formatação que pode ficar melhor ou deseja falar sobre o projeto? Entre em contato diretamente por e-mail.
+          </p>
+
+          <div class="contact-box">
+            <div class="contact-meta">
+              <span class="contact-label">E-mail direto</span>
+              <a href="mailto:rafaelfurgeri00@gmail.com" class="contact-email">rafaelfurgeri00@gmail.com</a>
+              <span class="contact-person">Rafael Furgeri · Informática para Negócios</span>
+            </div>
+            <div class="contact-actions">
+              <a href="mailto:rafaelfurgeri00@gmail.com?subject=Contato%20-%20CV%20Studio" class="btn primary sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 15px; height: 15px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+                Enviar e-mail
+              </a>
+              <button type="button" class="btn ghost sm" id="btn-copy-email" data-email="rafaelfurgeri00@gmail.com">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 15px; height: 15px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span id="copy-email-label">Copiar e-mail</span>
+              </button>
+            </div>
+          </div>
+
+          <h4>Como você pode colaborar</h4>
+          <ul class="info-list">
+            <li>Sugestões de novas áreas, campos opcionais ou melhorias na experiência de preenchimento;</li>
+            <li>Relato de eventuais incompatibilidades ao abrir o documento em versões específicas do Word, LibreOffice ou Google Docs;</li>
+            <li>Contato acadêmico, feedbacks de recrutadores ou oportunidades profissionais.</li>
+          </ul>
+        </section>
+
+        <!-- ABA: POLÍTICA DE PRIVACIDADE -->
+        <section class="info-panel" role="tabpanel" id="panel-privacidade" aria-labelledby="tab-btn-privacidade" data-info-panel="privacidade" hidden>
+          <div class="privacy-header-row">
+            <h3>Política de Privacidade</h3>
+            <span class="privacy-updated">Atualizada em outubro de 2026</span>
+          </div>
+
+          <div class="info-callout">
+            <strong>Resumo transparente: seus dados não saem do seu dispositivo</strong>
+            <p>
+              O CV Studio funciona integralmente no seu próprio navegador. Nenhuma informação pessoal preenchida no currículo (nome, telefone, endereço, e-mail ou histórico profissional) é enviada, coletada ou salva em servidores externos.
+            </p>
+          </div>
+
+          <h4>1. Processamento 100% local (Client-Side)</h4>
+          <p>
+            Toda a montagem da pré-visualização em folha A4, a geração do arquivo Microsoft Word (<code>.docx</code>) e a exportação em PDF (realizada pela função nativa de impressão do navegador) acontecem exclusivamente na memória do seu computador ou celular. O site não possui banco de dados remoto nem exige criação de conta.
+          </p>
+
+          <h4>2. Salvamento automático no navegador (LocalStorage)</h4>
+          <p>
+            Para evitar que você perca o que já digitou caso atualize ou feche a aba por engano, utilizamos o armazenamento local do seu próprio navegador (<code>localStorage</code>). Esses dados ficam restritos ao aparelho e navegador utilizados no momento e podem ser apagados instantaneamente clicando no botão <strong>"Limpar"</strong> no topo da página.
+          </p>
+
+          <h4>3. Uso em computadores públicos ou compartilhados</h4>
+          <p>
+            Se você estiver montando seu currículo em um computador de uso coletivo — como laboratórios de faculdade, bibliotecas ou telecentros —, recomendamos clicar no botão <strong>"Limpar"</strong> logo após concluir o download do arquivo para remover seus dados do navegador daquela máquina.
+          </p>
+
+          <h4>4. Cookies, anúncios e compartilhamento de dados</h4>
+          <p>
+            Não utilizamos cookies de rastreamento comportamental, scripts de venda de dados ou compartilhamento de informações pessoais com terceiros. Para renderizar corretamente as fontes visuais da interface e da folha A4, a página carrega arquivos tipográficos do serviço <strong>Google Fonts</strong>, que opera sob a política de privacidade técnica da Google sem qualquer acesso aos dados digitados no formulário.
+          </p>
+
+          <h4>5. Seus direitos (LGPD — Lei nº 13.709/2018)</h4>
+          <p>
+            Em respeito aos princípios da Lei Geral de Proteção de Dados Pessoais (LGPD), garantimos transparência total e autonomia imediata: como não retemos cópias das suas informações em servidores, você possui controle integral para consultar, alterar, exportar ou excluir definitivamente seus dados diretamente na tela da aplicação.
+          </p>
+
+          <h4>6. Canal para dúvidas sobre privacidade</h4>
+          <p>
+            Caso tenha qualquer dúvida sobre o funcionamento técnico desta ferramenta ou sobre esta Política de Privacidade, entre em contato com o responsável pelo projeto, <strong>Rafael Furgeri</strong>, através do e-mail <a href="mailto:rafaelfurgeri00@gmail.com">rafaelfurgeri00@gmail.com</a>.
+          </p>
+        </section>
+      </div>
+    </div>
+  </div>
 
   <button type="button" class="fab" id="open-preview" aria-label="Ver prévia do currículo">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>

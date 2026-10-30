@@ -827,31 +827,149 @@
     });
     $('#close-preview').addEventListener('click', () => $('#preview-panel').classList.remove('open'));
 
-    // ---------- Tela de Boas-Vindas ----------
+    // ---------- Tela de Boas-Vindas & Modal Institucional ----------
     const welcomeModal = $('#welcome-modal');
-    const closeWelcome = () => {
+    const infoModal = $('#info-modal');
+    const INFO_TABS = ['sobre', 'contato', 'privacidade'];
+
+    const closeWelcome = ({ focusInput = true } = {}) => {
       if (welcomeModal) {
         welcomeModal.classList.remove('active');
         const nomeInput = $('#nome');
-        if (nomeInput && !nomeInput.value) {
+        if (focusInput && nomeInput && !nomeInput.value) {
           setTimeout(() => nomeInput.focus(), 150);
         }
       }
     };
-    const openWelcome = () => {
-      if (welcomeModal) welcomeModal.classList.add('active');
+
+    const setInfoTab = (tabName, { updateHash = true } = {}) => {
+      const tab = INFO_TABS.includes(tabName) ? tabName : 'sobre';
+      $$('[data-info-tab]').forEach((btn) => {
+        const active = btn.dataset.infoTab === tab;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-selected', String(active));
+        btn.tabIndex = active ? 0 : -1;
+      });
+      $$('[data-info-panel]').forEach((panel) => {
+        const active = panel.dataset.infoPanel === tab;
+        panel.classList.toggle('active', active);
+        panel.hidden = !active;
+      });
+      const body = $('#info-card-body');
+      if (body) body.scrollTop = 0;
+      if (updateHash) {
+        try { history.replaceState(null, '', `#${tab}`); } catch { /* ignora em contextos restritos */ }
+      }
     };
 
-    $('#btn-enter-site')?.addEventListener('click', closeWelcome);
-    $('#welcome-close-btn')?.addEventListener('click', closeWelcome);
-    $('#btn-about')?.addEventListener('click', openWelcome);
+    const openInfo = (tabName = 'sobre', { updateHash = true } = {}) => {
+      if (welcomeModal?.classList.contains('active')) {
+        closeWelcome({ focusInput: false });
+      }
+      setInfoTab(tabName, { updateHash });
+      infoModal?.classList.add('active');
+    };
+
+    const closeInfo = () => {
+      if (!infoModal?.classList.contains('active')) return;
+      infoModal.classList.remove('active');
+      const rawHash = window.location.hash.replace(/^#/, '');
+      if (INFO_TABS.includes(rawHash)) {
+        try {
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        } catch { /* ignora */ }
+      }
+    };
+
+    $('#btn-enter-site')?.addEventListener('click', () => closeWelcome());
+    $('#welcome-close-btn')?.addEventListener('click', () => closeWelcome());
     welcomeModal?.addEventListener('click', (e) => {
       if (e.target === welcomeModal) closeWelcome();
     });
 
+    document.addEventListener('click', (e) => {
+      const openLink = e.target.closest('[data-open-info]');
+      if (openLink) {
+        e.preventDefault();
+        openInfo(openLink.dataset.openInfo);
+        return;
+      }
+      const tabBtn = e.target.closest('[data-info-tab]');
+      if (tabBtn) {
+        setInfoTab(tabBtn.dataset.infoTab);
+      }
+    });
+
+    $('#info-close-btn')?.addEventListener('click', closeInfo);
+    infoModal?.addEventListener('click', (e) => {
+      if (e.target === infoModal) closeInfo();
+    });
+
+    // Navegação por setas nas abas institucionais
+    $('.info-tabs')?.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      const currentTab = $('[data-info-tab].active')?.dataset.infoTab || 'sobre';
+      const idx = INFO_TABS.indexOf(currentTab);
+      const nextIdx = e.key === 'ArrowRight'
+        ? (idx + 1) % INFO_TABS.length
+        : (idx - 1 + INFO_TABS.length) % INFO_TABS.length;
+      const nextTab = INFO_TABS[nextIdx];
+      e.preventDefault();
+      setInfoTab(nextTab);
+      $(`[data-info-tab="${nextTab}"]`)?.focus();
+    });
+
+    // Botão de copiar e-mail na aba Contato
+    let copyTimer;
+    $('#btn-copy-email')?.addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      const email = btn.dataset.email || 'rafaelfurgeri00@gmail.com';
+      let copied = false;
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(email);
+          copied = true;
+        }
+      } catch { /* fallback abaixo */ }
+
+      if (!copied) {
+        const ta = Object.assign(document.createElement('textarea'), { value: email });
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { copied = document.execCommand('copy'); } catch { /* ignora */ }
+        ta.remove();
+      }
+
+      if (copied) {
+        const lbl = $('#copy-email-label');
+        if (lbl) {
+          lbl.textContent = 'Copiado ✓';
+          clearTimeout(copyTimer);
+          copyTimer = setTimeout(() => { lbl.textContent = 'Copiar e-mail'; }, 2200);
+        }
+        toast(`E-mail copiado: ${email}`, 'success');
+      } else {
+        toast(`E-mail de contato: ${email}`);
+      }
+    });
+
+    // Abre direto caso a URL tenha #sobre, #contato ou #privacidade
+    const syncFromHash = () => {
+      const h = window.location.hash.replace(/^#/, '').toLowerCase();
+      if (INFO_TABS.includes(h)) {
+        openInfo(h, { updateHash: false });
+      }
+    };
+    window.addEventListener('hashchange', syncFromHash);
+    syncFromHash();
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        if (welcomeModal?.classList.contains('active')) {
+        if (infoModal?.classList.contains('active')) {
+          closeInfo();
+        } else if (welcomeModal?.classList.contains('active')) {
           closeWelcome();
         } else {
           $('#preview-panel').classList.remove('open');
