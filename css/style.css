@@ -183,7 +183,7 @@ button, input, textarea, select {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   gap: clamp(1rem, 2vw, 1.75rem);
-  padding: clamp(1rem, 2.2vw, 1.75rem) clamp(1rem, 3vw, 2.25rem) 3rem;
+  padding: clamp(1rem, 2.2vw, 1.75rem) clamp(1rem, 3vw, 2.25rem) clamp(1rem, 2vw, 1.75rem);
   max-width: 1560px;
   margin: 0 auto;
 }
@@ -1879,136 +1879,223 @@ kbd {
   color: var(--text-3);
 }
 
-.welcome-links {
+/* =========================================================
+   Bloco Institucional Inferior (Retângulo Completo: Sobre, Contato e Privacidade)
+   ========================================================= */
+.site-footer {
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2.25rem) 2.75rem;
+}
+
+.site-footer-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(1.4rem, 2.5vw, 2rem);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1.1fr;
+  gap: 1.75rem 2.25rem;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.footer-col + .footer-col {
+  padding-left: 2.25rem;
+  border-left: 1px solid var(--border-subtle);
+}
+
+.footer-col-head {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.55rem;
-  font-size: 0.77rem;
-  color: var(--text-3);
+  gap: 0.55rem;
+  margin-bottom: 0.65rem;
 }
 
-.welcome-links a {
-  color: var(--text-3);
-  text-decoration: none;
-  transition: color 0.15s;
+.brand-mark.sm {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  font-size: 0.68rem;
 }
 
-.welcome-links a:hover {
-  color: var(--text);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-/* =========================================================
-   Navegação Institucional (Topbar, Rodapé e Modal com Abas)
-   ========================================================= */
-.topbar-nav {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.15rem;
-}
-
-.nav-link {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.4rem 0.65rem;
-  border-radius: var(--radius-xs);
-  font-size: 0.8rem;
+.footer-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
   font-weight: 500;
-  color: var(--text-2);
-  text-decoration: none;
-  transition: color 0.15s, background-color 0.15s;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.25rem;
 }
 
-.nav-link:hover {
+.footer-title {
+  margin: 0 0 0.65rem;
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+.footer-col-head .footer-title {
+  margin: 0;
+}
+
+.footer-title strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.footer-desc {
+  margin: 0 0 0.95rem;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+.footer-desc code {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
   color: var(--text);
   background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.05rem 0.3rem;
 }
 
-.nav-link:focus-visible {
+.footer-more-link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  padding: 0.38rem 0.7rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  transition: border-color 0.16s, background-color 0.16s, color 0.16s;
+}
+
+.footer-more-link svg {
+  width: 14px;
+  height: 14px;
+  color: var(--red);
+  transition: transform 0.16s var(--ease);
+}
+
+.footer-more-link:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-3);
+}
+
+.footer-more-link:hover svg {
+  transform: translateX(2px);
+}
+
+.footer-more-link:focus-visible {
   outline: 2px solid var(--red);
   outline-offset: 2px;
 }
 
-.topbar-sep {
-  width: 1px;
-  height: 16px;
-  background: var(--border);
-  margin: 0 0.15rem;
-}
-
-/* Rodapé Institucional */
-.site-footer {
-  border-top: 1px solid var(--border);
-  background: var(--bg-elev);
-}
-
-.site-footer-inner {
-  max-width: 1560px;
-  margin: 0 auto;
-  padding: 1.15rem clamp(1rem, 3vw, 2.25rem);
+/* Cartão compacto de e-mail na coluna de Contato */
+.footer-email-card {
+  margin-top: auto;
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.85rem 1.5rem;
-  font-size: 0.81rem;
-  color: var(--text-3);
+  flex-direction: column;
+  gap: 0.55rem;
 }
 
-.footer-brand-info {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.footer-brand {
-  color: var(--text);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.footer-brand strong {
-  color: var(--red);
-}
-
-.footer-brand-info strong {
-  color: var(--text-2);
-  font-weight: 600;
-}
-
-.footer-dot {
-  color: var(--border-strong);
-}
-
-.footer-nav {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.35rem 1.25rem;
-}
-
-.footer-nav a {
-  color: var(--text-2);
-  text-decoration: none;
+.footer-email-addr {
+  font-family: var(--font-mono);
+  font-size: 0.83rem;
   font-weight: 500;
-  transition: color 0.15s;
+  color: var(--text);
+  text-decoration: none;
+  word-break: break-all;
 }
 
-.footer-nav a:hover {
-  color: var(--text);
+.footer-email-addr:hover {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-.footer-nav a:focus-visible {
-  outline: 2px solid var(--red);
-  outline-offset: 3px;
-  border-radius: 3px;
+.footer-email-btns {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.footer-mini-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.32rem 0.7rem;
+  border-radius: 5px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.footer-mini-btn:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.footer-mini-btn.primary {
+  background: var(--red);
+  border-color: var(--red);
+  color: #FFFFFF;
+}
+
+.footer-mini-btn.primary:hover {
+  background: var(--red-hover);
+  border-color: var(--red-hover);
+}
+
+.footer-bottom {
+  margin-top: 1.5rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.5rem;
+  font-size: 0.79rem;
+  color: var(--text-3);
+}
+
+.footer-bottom strong {
+  color: var(--text-2);
+  font-weight: 600;
+}
+
+.footer-badges {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-3);
 }
 
 /* Modal Institucional (Sobre, Contato e Política de Privacidade) */
@@ -2302,11 +2389,11 @@ kbd {
 @media (max-width: 1100px) {
   .layout {
     grid-template-columns: 1fr;
-    padding-bottom: 2rem;
+    padding-bottom: 1.25rem;
   }
 
-  .site-footer-inner {
-    padding-bottom: calc(5.2rem + env(safe-area-inset-bottom));
+  .site-footer {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
   }
 
   .preview-panel {
@@ -2338,9 +2425,17 @@ kbd {
   }
 }
 
-@media (max-width: 860px) {
-  .hide-compact {
-    display: none !important;
+@media (max-width: 920px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.35rem;
+  }
+
+  .footer-col + .footer-col {
+    padding-left: 0;
+    border-left: 0;
+    padding-top: 1.35rem;
+    border-top: 1px solid var(--border-subtle);
   }
 }
 
@@ -2388,7 +2483,7 @@ kbd {
   }
 
   .layout {
-    padding: 0.75rem 0.65rem calc(6rem + env(safe-area-inset-bottom));
+    padding: 0.75rem 0.65rem 1rem;
     gap: 1rem;
   }
 
@@ -2575,11 +2670,19 @@ kbd {
     -webkit-overflow-scrolling: touch;
   }
 
-  .site-footer-inner {
+  .site-footer {
+    padding: 0 0.65rem calc(5.5rem + env(safe-area-inset-bottom));
+  }
+
+  .site-footer-box {
+    padding: 1.2rem 0.95rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .footer-bottom {
     flex-direction: column;
     align-items: flex-start;
-    padding: 1.1rem 0.9rem calc(5.2rem + env(safe-area-inset-bottom));
-    gap: 0.65rem;
+    gap: 0.4rem;
   }
 
   .info-overlay {

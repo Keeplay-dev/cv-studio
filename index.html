@@ -62,18 +62,11 @@
           <span class="author-sep" aria-hidden="true">/</span>
           <span class="author-course">5º semestre de Informática para Negócios</span>
         </div>
-        <nav class="welcome-links" aria-label="Informações institucionais">
-          <a href="#sobre" data-open-info="sobre">Sobre</a>
-          <span aria-hidden="true">·</span>
-          <a href="#contato" data-open-info="contato">Contato</a>
-          <span aria-hidden="true">·</span>
-          <a href="#privacidade" data-open-info="privacidade">Política de Privacidade</a>
-        </nav>
       </footer>
     </div>
   </div>
 
-  <!-- =================== CABEÇALHO =================== -->
+  <!-- =================== CABEÇALHO (APENAS FERRAMENTAS DO EDITOR) =================== -->
   <header class="topbar">
     <div class="topbar-left">
       <a class="brand" href="#" aria-label="CV Studio — Gerador de Currículos">
@@ -90,16 +83,8 @@
         <span class="hide-mobile" id="save-label">Salvo no navegador</span>
       </span>
 
-      <nav class="topbar-nav" aria-label="Institucional">
-        <a class="nav-link" href="#sobre" data-open-info="sobre" id="btn-about">Sobre</a>
-        <a class="nav-link hide-compact" href="#contato" data-open-info="contato">Contato</a>
-        <a class="nav-link hide-compact" href="#privacidade" data-open-info="privacidade">Privacidade</a>
-      </nav>
-
-      <span class="topbar-sep hide-compact" aria-hidden="true"></span>
-
       <button class="btn ghost sm" id="btn-example" type="button" title="Preencher com dados de exemplo">
-        <span class="hide-mobile">Ver </span>Exemplo
+        <span><span class="hide-mobile">Preencher </span>Exemplo</span>
       </button>
       <button class="btn ghost sm btn-clear-top" id="btn-clear" type="button" title="Limpar todos os campos">Limpar</button>
     </div>
@@ -338,19 +323,61 @@
     </aside>
   </main>
 
-  <!-- =================== RODAPÉ INSTITUCIONAL =================== -->
+  <!-- =================== RODAPÉ INSTITUCIONAL (BLOCO COMPLETO) =================== -->
   <footer class="site-footer">
-    <div class="site-footer-inner">
-      <div class="footer-brand-info">
-        <span class="footer-brand">CV<strong>Studio</strong></span>
-        <span class="footer-dot" aria-hidden="true">·</span>
-        <span>Desenvolvido por <strong>Rafael Furgeri</strong> — Informática para Negócios</span>
+    <div class="site-footer-box">
+      <div class="footer-grid">
+        <!-- Coluna 1: Sobre -->
+        <div class="footer-col">
+          <div class="footer-col-head">
+            <span class="brand-mark sm">CV</span>
+            <h2 class="footer-title">Sobre o CV<strong>Studio</strong></h2>
+          </div>
+          <p class="footer-desc">
+            Ferramenta gratuita desenvolvida para criar currículos limpos em Word (<code>.docx</code>) e PDF A4, estruturados em coluna única para passar por filtros automáticos de vagas (ATS) e facilitar a leitura dos recrutadores.
+          </p>
+          <a href="#sobre" class="footer-more-link" data-open-info="sobre">
+            <span>Conhecer o projeto e objetivos</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <!-- Coluna 2: Contato -->
+        <div class="footer-col">
+          <span class="footer-kicker">Fale conosco</span>
+          <h2 class="footer-title">Contato</h2>
+          <p class="footer-desc">
+            Dúvidas sobre o uso, sugestões de melhorias ou relato de problemas na formatação do arquivo:
+          </p>
+          <div class="footer-email-card">
+            <a href="mailto:rafaelfurgeri00@gmail.com?subject=Contato%20-%20CV%20Studio" class="footer-email-addr">rafaelfurgeri00@gmail.com</a>
+            <div class="footer-email-btns">
+              <a href="mailto:rafaelfurgeri00@gmail.com?subject=Contato%20-%20CV%20Studio" class="footer-mini-btn primary">Enviar</a>
+              <button type="button" class="footer-mini-btn" data-copy-email="rafaelfurgeri00@gmail.com">
+                <span class="copy-label">Copiar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna 3: Política de Privacidade -->
+        <div class="footer-col">
+          <span class="footer-kicker">Transparência &amp; LGPD</span>
+          <h2 class="footer-title">Política de Privacidade</h2>
+          <p class="footer-desc">
+            Seus dados pessoais não saem do seu aparelho. Todo o preenchimento e a geração do documento ocorrem localmente no seu próprio navegador, sem cadastro e sem banco de dados externo.
+          </p>
+          <a href="#privacidade" class="footer-more-link" data-open-info="privacidade">
+            <span>Ler Política de Privacidade completa</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
       </div>
-      <nav class="footer-nav" aria-label="Links institucionais">
-        <a href="#sobre" data-open-info="sobre">Sobre</a>
-        <a href="#contato" data-open-info="contato">Contato</a>
-        <a href="#privacidade" data-open-info="privacidade">Política de Privacidade</a>
-      </nav>
+
+      <div class="footer-bottom">
+        <span>Desenvolvido por <strong>Rafael Furgeri</strong> · 5º semestre de Informática para Negócios</span>
+        <span class="footer-badges">100% Gratuito · Sem marcas d'água · Processamento local</span>
+      </div>
     </div>
   </footer>
 
@@ -419,9 +446,9 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 15px; height: 15px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
                 Enviar e-mail
               </a>
-              <button type="button" class="btn ghost sm" id="btn-copy-email" data-email="rafaelfurgeri00@gmail.com">
+              <button type="button" class="btn ghost sm" id="btn-copy-email" data-copy-email="rafaelfurgeri00@gmail.com">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 15px; height: 15px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                <span id="copy-email-label">Copiar e-mail</span>
+                <span class="copy-label" data-default-label="Copiar e-mail">Copiar e-mail</span>
               </button>
             </div>
           </div>

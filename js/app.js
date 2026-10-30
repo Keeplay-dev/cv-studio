@@ -919,11 +919,11 @@
       $(`[data-info-tab="${nextTab}"]`)?.focus();
     });
 
-    // Botão de copiar e-mail na aba Contato
-    let copyTimer;
-    $('#btn-copy-email')?.addEventListener('click', async (e) => {
-      const btn = e.currentTarget;
-      const email = btn.dataset.email || 'rafaelfurgeri00@gmail.com';
+    // Botões de copiar e-mail (no bloco inferior e no modal de Contato)
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-copy-email]');
+      if (!btn) return;
+      const email = btn.dataset.copyEmail || 'rafaelfurgeri00@gmail.com';
       let copied = false;
       try {
         if (navigator.clipboard?.writeText) {
@@ -943,11 +943,13 @@
       }
 
       if (copied) {
-        const lbl = $('#copy-email-label');
+        const lbl = $('.copy-label', btn);
         if (lbl) {
+          const original = lbl.dataset.defaultLabel || lbl.textContent;
+          lbl.dataset.defaultLabel = original;
           lbl.textContent = 'Copiado ✓';
-          clearTimeout(copyTimer);
-          copyTimer = setTimeout(() => { lbl.textContent = 'Copiar e-mail'; }, 2200);
+          clearTimeout(btn._copyTimer);
+          btn._copyTimer = setTimeout(() => { lbl.textContent = original; }, 2200);
         }
         toast(`E-mail copiado: ${email}`, 'success');
       } else {
