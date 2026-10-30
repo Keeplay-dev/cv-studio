@@ -1,13 +1,18 @@
 /**
  * DocxBuilder — monta um currículo .docx seguindo o molde
- * CV_ESTAGIO_RAFAEL_2026.docx (Calibri, azul #1F4E79, seções sublinhadas).
+ * CV_ESTAGIO_RAFAEL_2026.docx (Calibri, seções sublinhadas, opção Azul #1F4E79 ou Preto #000000).
  */
 const DocxBuilder = (() => {
   'use strict';
 
-  // Paleta e tamanhos (meios-pontos) extraídos do modelo original
-  const C = { primary: '1F4E79', text: '333333', muted: '595959', meta: '707070' };
+  // Paletas disponíveis e tamanhos (meios-pontos) extraídos do modelo original
+  const PALETTES = {
+    azul: { primary: '1F4E79', text: '333333', muted: '595959', meta: '707070' },
+    preto: { primary: '000000', text: '222222', muted: '4A4A4A', meta: '595959' },
+  };
   const SZ = { name: 36, contact: 19, section: 23, itemTitle: 21, body: 21, desc: 20, meta: 19 };
+
+  const getPalette = (corDoc) => PALETTES[corDoc === 'preto' ? 'preto' : 'azul'];
 
   const esc = (s) => String(s ?? '')
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -16,34 +21,35 @@ const DocxBuilder = (() => {
   const has = (v) => typeof v === 'string' ? v.trim().length > 0 : !!v;
 
   /** Cria um run de texto; quebras de linha viram <w:br/>. */
-  function run(text, { bold, italic, color = C.text, size = SZ.body } = {}) {
+  function run(text, { bold, italic, color = PALETTES.azul.text, size = SZ.body } = {}) {
     const rPr = `<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/>${bold ? '<w:b/>' : ''}${italic ? '<w:i/>' : ''}<w:color w:val="${color}"/><w:sz w:val="${size}"/><w:szCs w:val="${size}"/></w:rPr>`;
     const lines = String(text ?? '').split(/\r?\n/);
     const body = lines.map((l, i) => `${i ? '<w:br/>' : ''}<w:t xml:space="preserve">${esc(l)}</w:t>`).join('');
     return `<w:r>${rPr}${body}</w:r>`;
   }
 
-  function para(runs, { before, after, indent, center, border, keepNext } = {}) {
+  function para(runs, { before, after, indent, center, border, borderColor = PALETTES.azul.primary, keepNext } = {}) {
     const spacing = (before != null || after != null)
       ? `<w:spacing${before != null ? ` w:before="${before}"` : ''}${after != null ? ` w:after="${after}"` : ''}/>` : '';
     const pPr =
       (keepNext ? '<w:keepNext/>' : '') +
-      (border ? `<w:pBdr><w:bottom w:val="single" w:sz="12" w:space="3" w:color="${C.primary}"/></w:pBdr>` : '') +
+      (border ? `<w:pBdr><w:bottom w:val="single" w:sz="12" w:space="3" w:color="${borderColor}"/></w:pBdr>` : '') +
       spacing +
       (indent ? `<w:ind w:left="${indent}"/>` : '') +
       (center ? '<w:jc w:val="center"/>' : '');
     return `<w:p>${pPr ? `<w:pPr>${pPr}</w:pPr>` : ''}${runs.join('')}</w:p>`;
   }
 
-  const section = (title) => para(
-    [run(title.toUpperCase(), { bold: true, color: C.primary, size: SZ.section })],
-    { border: true, before: 280, after: 80, keepNext: true }
+  const section = (title, pal) => para(
+    [run(title.toUpperCase(), { bold: true, color: pal.primary, size: SZ.section })],
+    { border: true, borderColor: pal.primary, before: 280, after: 80, keepNext: true }
   );
 
   const join = (parts, sep = '  |  ') => parts.filter(has).map((p) => p.trim()).join(sep);
 
   /** Gera o XML do corpo do documento a partir dos dados do formulário. */
   function bodyXml(d) {
+    const C = getPalette(d?.corDoc);
     const out = [];
 
     // ---- Cabeçalho -------------------------------------------------------
@@ -58,39 +64,39 @@ const DocxBuilder = (() => {
 
     // ---- Objetivo --------------------------------------------------------
     if (has(d.objetivo)) {
-      out.push(section('Objetivo'));
-      out.push(para([run(d.objetivo, { size: SZ.body })], { after: 80 }));
+      out.push(section('Objetivo', C));
+      out.push(para([run(d.objetivo, { color: C.text, size: SZ.body })], { after: 80 }));
     }
 
     // ---- Experiências ----------------------------------------------------
     const exps = (d.experiencias || []).filter((e) => has(e.empresa) || has(e.cargo));
     if (exps.length) {
-      out.push(section('Experiências'));
+      out.push(section('Experiências', C));
       exps.forEach((e) => {
         const titulo = join([has(e.empresa) ? `Empresa: ${e.empresa}` : '', has(e.cargo) ? `Cargo: ${e.cargo}` : '']);
         const periodo = e.atual ? 'Trabalho atualmente' : e.periodo;
         const runs = [run(titulo, { bold: true, color: C.primary, size: SZ.itemTitle })];
         if (has(periodo)) runs.push(run(`  |  Período: ${periodo}`, { italic: true, color: C.meta, size: SZ.meta }));
         out.push(para(runs, { before: 80, after: has(e.funcoes) ? 40 : 120, keepNext: has(e.funcoes) }));
-        if (has(e.funcoes)) out.push(para([run(`Funções: ${e.funcoes}`, { size: SZ.desc })], { after: 120, indent: 288 }));
+        if (has(e.funcoes)) out.push(para([run(`Funções: ${e.funcoes}`, { color: C.text, size: SZ.desc })], { after: 120, indent: 288 }));
       });
     }
 
     // ---- Formação --------------------------------------------------------
     const forms = (d.formacoes || []).filter((f) => has(f.curso) || has(f.instituicao));
     if (forms.length) {
-      out.push(section('Formação'));
+      out.push(section('Formação', C));
       forms.forEach((f, i) => {
-        out.push(para([run(join([f.curso, f.instituicao, f.status], ' | '), { size: SZ.body })], { after: i === forms.length - 1 ? 120 : 60 }));
+        out.push(para([run(join([f.curso, f.instituicao, f.status], ' | '), { color: C.text, size: SZ.body })], { after: i === forms.length - 1 ? 120 : 60 }));
       });
     }
 
     // ---- Atividades extracurriculares -----------------------------------
     const cursos = (d.cursos || []).filter((c) => has(c.nome));
     if (cursos.length) {
-      out.push(section('Atividades Extracurriculares'));
+      out.push(section('Atividades Extracurriculares', C));
       cursos.forEach((c, i) => {
-        out.push(para([run(`• ${join([c.nome, c.instituicao, c.data], ' | ')}`, { size: SZ.desc })],
+        out.push(para([run(`• ${join([c.nome, c.instituicao, c.data], ' | ')}`, { color: C.text, size: SZ.desc })],
           { after: i === cursos.length - 1 ? 120 : 40, indent: 288 }));
       });
     }
@@ -98,17 +104,17 @@ const DocxBuilder = (() => {
     // ---- Habilidades -----------------------------------------------------
     const skills = (d.habilidades || []).filter(has);
     if (skills.length) {
-      out.push(section('Habilidades'));
+      out.push(section('Habilidades', C));
       const txt = skills.join(', ');
-      out.push(para([run(/[.!?]$/.test(txt) ? txt : `${txt}.`, { size: SZ.desc })], { after: 120, indent: 288 }));
+      out.push(para([run(/[.!?]$/.test(txt) ? txt : `${txt}.`, { color: C.text, size: SZ.desc })], { after: 120, indent: 288 }));
     }
 
     // ---- Idiomas (opcional) ---------------------------------------------
     const idiomas = (d.idiomas || []).filter((x) => has(x.idioma));
     if (idiomas.length) {
-      out.push(section('Idiomas'));
+      out.push(section('Idiomas', C));
       idiomas.forEach((x, i) => {
-        out.push(para([run(`• ${join([x.idioma, x.nivel], ' | ')}`, { size: SZ.desc })],
+        out.push(para([run(`• ${join([x.idioma, x.nivel], ' | ')}`, { color: C.text, size: SZ.desc })],
           { after: i === idiomas.length - 1 ? 120 : 40, indent: 288 }));
       });
     }
@@ -116,12 +122,12 @@ const DocxBuilder = (() => {
     // ---- Trabalho voluntário --------------------------------------------
     const vols = (d.voluntarios || []).filter((v) => has(v.titulo));
     if (vols.length) {
-      out.push(section('Trabalho Voluntário'));
+      out.push(section('Trabalho Voluntário', C));
       vols.forEach((v) => {
         const runs = [run(v.titulo, { bold: true, color: C.primary, size: SZ.itemTitle })];
         if (has(v.data)) runs.push(run(` | ${v.data}`, { italic: true, color: C.meta, size: SZ.meta }));
         out.push(para(runs, { before: 80, after: has(v.tarefas) ? 40 : 120, keepNext: has(v.tarefas) }));
-        if (has(v.tarefas)) out.push(para([run(`Tarefas: ${v.tarefas}`, { size: SZ.desc })], { after: 120, indent: 288 }));
+        if (has(v.tarefas)) out.push(para([run(`Tarefas: ${v.tarefas}`, { color: C.text, size: SZ.desc })], { after: 120, indent: 288 }));
       });
     }
 

@@ -19,9 +19,9 @@
     voluntarios: () => ({ titulo: '', data: '', tarefas: '' }),
   };
   const LIST_EMPTY_MSG = {
-    experiencias: 'Nenhuma experiência adicionada ainda.',
-    formacoes: 'Nenhuma formação adicionada ainda.',
-    cursos: 'Nenhuma atividade adicionada ainda.',
+    experiencias: 'Nenhuma experiência adicionada.',
+    formacoes: 'Nenhuma formação adicionada.',
+    cursos: 'Nenhum curso ou atividade adicionado.',
     idiomas: 'Nenhum idioma adicionado.',
     voluntarios: 'Nenhum trabalho voluntário adicionado.',
   };
@@ -29,6 +29,7 @@
   const blankState = () => ({
     nome: '', idade: '', telefone: '', email: '', endereco: '', cep: '', linkedin: '',
     objetivo: '',
+    corDoc: 'azul',
     experiencias: [EMPTY_ITEMS.experiencias()],
     formacoes: [EMPTY_ITEMS.formacoes()],
     cursos: [], habilidades: [], idiomas: [], voluntarios: [],
@@ -43,6 +44,7 @@
     cep: '01310-100',
     linkedin: 'linkedin.com/in/lucas-silva-exemplo',
     objetivo: 'Estágio em Tecnologia da Informação | Suporte Técnico | T.I',
+    corDoc: 'azul',
     experiencias: [
       {
         empresa: 'TechSoluções Serviços Digitais',
@@ -95,13 +97,16 @@
     'Criatividade', 'Pontualidade', 'Inglês técnico',
   ];
 
+  const SLIDERS_ICON = '<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="2" y1="14" x2="6" y2="14"/><line x1="10" y1="8" x2="14" y2="8"/><line x1="18" y1="16" x2="22" y2="16"/>';
+
   const ICONS = {
     user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
     target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
     briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
     cap: '<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
     award: '<circle cx="12" cy="8" r="6"/><path d="M15.5 13.5L17 22l-5-3-5 3 1.5-8.5"/>',
-    spark: '<path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/>',
+    sliders: SLIDERS_ICON,
+    spark: SLIDERS_ICON,
     heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',
     download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/>',
     check: '<path d="M20 6L9 17l-5-5"/>',
@@ -109,7 +114,7 @@
     down: '<path d="M6 9l6 6 6-6"/>',
     trash: '<path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
   };
-  const svg = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${ICONS[name]}</svg>`;
+  const svg = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ICONS.check}</svg>`;
 
   // Seção da prévia correspondente a cada etapa
   const STEP_SECTION = ['dados', 'objetivo', 'experiencias', 'formacoes', 'cursos', 'habilidades', 'voluntarios', null];
@@ -121,12 +126,13 @@
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
       if (saved && typeof saved === 'object') {
-        // Se continha o exemplo de demonstração pré-carregado, limpa para iniciar em branco
         if (saved.nome === EXAMPLE.nome || saved.email === EXAMPLE.email) {
           localStorage.removeItem(STORAGE_KEY);
           return blankState();
         }
-        return { ...blankState(), ...saved };
+        const merged = { ...blankState(), ...saved };
+        merged.corDoc = merged.corDoc === 'preto' ? 'preto' : 'azul';
+        return merged;
       }
     } catch { /* ignora dados corrompidos */ }
     return blankState();
@@ -135,14 +141,40 @@
   let saveTimer;
   function save() {
     const el = $('#save-status');
-    el.classList.add('saving');
-    el.lastChild.textContent = 'Salvando…';
+    const lbl = $('#save-label');
+    if (el) el.classList.add('saving');
+    if (lbl) lbl.textContent = 'Salvando…';
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => {
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* storage cheio/bloqueado */ }
-      el.classList.remove('saving');
-      el.lastChild.textContent = 'Salvo automaticamente';
+      if (el) el.classList.remove('saving');
+      if (lbl) lbl.textContent = 'Salvo no navegador';
     }, 450);
+  }
+
+  // ---------- Cor do documento (Azul vs Preto) -----------------------------
+  function syncDocColorUI() {
+    const cor = state.corDoc === 'preto' ? 'preto' : 'azul';
+    const paper = $('#paper');
+    if (paper) paper.dataset.docColor = cor;
+
+    $$('[data-doc-color-btn]').forEach((btn) => {
+      const active = btn.dataset.docColorBtn === cor;
+      btn.classList.toggle('active', active);
+      if (btn.getAttribute('role') === 'radio') {
+        btn.setAttribute('aria-checked', String(active));
+      } else {
+        btn.setAttribute('aria-pressed', String(active));
+      }
+    });
+  }
+
+  function setDocColor(nextColor) {
+    const cor = nextColor === 'preto' ? 'preto' : 'azul';
+    if (state.corDoc === cor) return;
+    state.corDoc = cor;
+    syncDocColorUI();
+    save();
   }
 
   // ---------- Máscaras -----------------------------------------------------
@@ -221,7 +253,7 @@
     });
     if (firstBad) {
       firstBad.focus();
-      toast('Preencha os campos obrigatórios destacados.', 'error');
+      toast('Confira os campos obrigatórios destacados antes de continuar.', 'error');
       return false;
     }
     return true;
@@ -236,7 +268,7 @@
   function updateCounters() {
     $$('.counter').forEach((c) => {
       const el = document.getElementById(c.dataset.for);
-      c.textContent = `${el.value.length}/${el.maxLength}`;
+      if (el) c.textContent = `${el.value.length}/${el.maxLength}`;
     });
   }
 
@@ -251,6 +283,10 @@
       const node = tpl.content.firstElementChild.cloneNode(true);
       node.dataset.index = idx;
       if (idx !== animateIndex) node.style.animation = 'none';
+
+      const idxBadge = $('.item-index', node);
+      if (idxBadge) idxBadge.textContent = String(idx + 1).padStart(2, '0');
+
       $$('[data-key]', node).forEach((el) => {
         const k = el.dataset.key;
         if (el.type === 'checkbox') el.checked = !!item[k]; else el.value = item[k] ?? '';
@@ -294,15 +330,20 @@
   function itemAction(name, idx, action, node) {
     const arr = state[name];
     if (action === 'remove') {
-      node.style.animation = '';
-      node.classList.add('removing');
-      node.addEventListener('animationend', function onEnd(e) {
-        if (e.target !== node) return;
-        node.removeEventListener('animationend', onEnd);
+      let finalized = false;
+      const finishRemove = () => {
+        if (finalized) return;
+        finalized = true;
         arr.splice(idx, 1);
         renderList(name);
         changed(name);
+      };
+      node.style.animation = '';
+      node.classList.add('removing');
+      node.addEventListener('animationend', (e) => {
+        if (e.target === node) finishRemove();
       }, { once: true });
+      setTimeout(finishRemove, 220);
       return;
     }
     const to = action === 'up' ? idx - 1 : idx + 1;
@@ -315,7 +356,7 @@
   // ---------- Habilidades (tags) ------------------------------------------
   function renderTags() {
     $('#tags').innerHTML = state.habilidades.map((h, i) =>
-      `<button type="button" class="tag" data-i="${i}" title="Remover">${esc(h)}</button>`).join('');
+      `<button type="button" class="tag" data-i="${i}" title="Remover habilidade">${esc(h)}</button>`).join('');
     renderChips('#skill-sugestoes', SKILL_SUGESTOES, (s) => state.habilidades.some((h) => h.toLowerCase() === s.toLowerCase()));
   }
 
@@ -337,6 +378,9 @@
 
   function renderPreview() {
     const s = state;
+    const paper = $('#paper');
+    paper.dataset.docColor = s.corDoc === 'preto' ? 'preto' : 'azul';
+
     let h = '';
 
     const hasAnyContent = has(s.nome) || has(s.telefone) || has(s.email) || has(s.endereco) || has(s.objetivo) ||
@@ -348,11 +392,23 @@
       s.voluntarios.some((v) => has(v.titulo));
 
     if (!hasAnyContent) {
-      $('#paper').innerHTML = `
+      paper.innerHTML = `
         <div class="empty-paper-notice">
-          <div class="empty-paper-badge">FOLHA EM BRANCO</div>
-          <div class="empty-paper-title">Nenhuma informação preenchida ainda</div>
-          <p class="empty-paper-desc">Preencha seus dados reais no formulário ao lado. Conforme você digita, a diagramação do currículo é gerada aqui em tempo real.</p>
+          <div class="empty-skeleton" aria-hidden="true">
+            <div class="sk-name"></div>
+            <div class="sk-contact"></div>
+            <div class="sk-sec"></div>
+            <div class="sk-line"></div>
+            <div class="sk-line short"></div>
+            <div class="sk-sec"></div>
+            <div class="sk-line"></div>
+            <div class="sk-line"></div>
+            <div class="sk-line short"></div>
+          </div>
+          <div class="empty-paper-caption">
+            <div class="empty-paper-title">Pré-visualização do documento</div>
+            <p class="empty-paper-desc">Comece a preencher seus dados no formulário ao lado para acompanhar a diagramação da folha A4 em tempo real.</p>
+          </div>
         </div>`;
       applyZoom();
       return;
@@ -422,7 +478,7 @@
       h += '</div>';
     }
 
-    $('#paper').innerHTML = h;
+    paper.innerHTML = h;
     applyZoom();
   }
 
@@ -431,7 +487,7 @@
     const el = $(`#paper [data-sec="${sec}"]`);
     if (!el) return;
     el.classList.remove('flash');
-    void el.offsetWidth; // reinicia a animação
+    void el.offsetWidth;
     el.classList.add('flash');
     const wrap = $('#paper-wrap');
     const top = el.getBoundingClientRect().top - wrap.getBoundingClientRect().top + wrap.scrollTop - 40;
@@ -466,7 +522,7 @@
       { label: 'Objetivo', step: 1, w: 15, ok: RULES.objetivo(s.objetivo) },
       { label: 'Experiências', step: 2, w: 15, ok: s.experiencias.some((e) => has(e.empresa)) },
       { label: 'Formação', step: 3, w: 15, ok: s.formacoes.some((f) => has(f.curso)) },
-      { label: 'Atividades', step: 4, w: 8, ok: s.cursos.some((c) => has(c.nome)) },
+      { label: 'Cursos e atividades', step: 4, w: 8, ok: s.cursos.some((c) => has(c.nome)) },
       { label: 'Habilidades (3+)', step: 5, w: 10, ok: s.habilidades.length >= 3 },
       { label: 'Idiomas', step: 5, w: 6, ok: s.idiomas.some((x) => has(x.idioma)) },
       { label: 'Voluntariado', step: 6, w: 6, ok: s.voluntarios.some((v) => has(v.titulo)) },
@@ -494,7 +550,7 @@
     }
     const hint = $('#file-name-hint');
     if (hint) {
-      hint.innerHTML = `Padrão: <code>${defaultBase}</code> (.docx / .pdf)`;
+      hint.innerHTML = `Sugestão automática: <code>${esc(defaultBase)}</code> (.docx / .pdf)`;
     }
   }
 
@@ -505,7 +561,7 @@
       `<li class="${c.ok ? 'ok' : ''}" data-step="${c.step}"><span class="ck">${c.ok ? '✓' : ''}</span>${esc(c.label)}</li>`).join('');
     const ring = $('#ring-fg');
     ring.style.strokeDashoffset = 326.7 * (1 - pct / 100);
-    ring.style.stroke = pct >= 80 ? 'hsl(152 65% 52%)' : pct >= 50 ? 'hsl(212 95% 62%)' : 'hsl(38 95% 60%)';
+    ring.style.stroke = pct >= 80 ? 'var(--success)' : 'var(--red)';
     animateNumber($('#score-num'), pct);
     updateFilenameUI();
   }
@@ -514,7 +570,7 @@
     const from = parseInt(el.textContent, 10) || 0;
     const t0 = performance.now();
     const tick = (t) => {
-      const p = Math.min(1, (t - t0) / 700);
+      const p = Math.min(1, (t - t0) / 600);
       el.textContent = `${Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3)))}%`;
       if (p < 1) requestAnimationFrame(tick);
     };
@@ -541,8 +597,7 @@
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 2000);
-      toast(`Currículo baixado com sucesso (${filename})! 🎉`, 'success');
-      confetti();
+      toast(`Download concluído: ${filename}`, 'success');
     } catch (err) {
       console.error(err);
       toast('Não foi possível gerar o arquivo Word. Tente novamente.', 'error');
@@ -568,8 +623,7 @@
     paper.style.marginBottom = '0';
     paper.style.marginInline = 'auto';
 
-    toast('Abrindo diálogo de PDF. Selecione "Salvar como PDF" na impressora.', 'success');
-    confetti();
+    toast('Selecione "Salvar como PDF" na janela de impressão.', 'success');
 
     setTimeout(() => {
       window.print();
@@ -583,26 +637,6 @@
     }, 180);
   }
 
-  function confetti() {
-    const colors = ['#4f9cff', '#9b6bff', '#2fd4e6', '#3ddc97', '#ffd166'];
-    const btn = $('#btn-download').getBoundingClientRect();
-    for (let i = 0; i < 60; i++) {
-      const p = document.createElement('span');
-      const size = 6 + Math.random() * 6;
-      Object.assign(p.style, {
-        position: 'fixed', zIndex: 60, pointerEvents: 'none', width: `${size}px`, height: `${size * 0.6}px`,
-        left: `${btn.left + btn.width / 2}px`, top: `${btn.top}px`, background: colors[i % colors.length], borderRadius: '2px',
-      });
-      document.body.appendChild(p);
-      const angle = Math.random() * Math.PI - Math.PI;
-      const dist = 120 + Math.random() * 260;
-      p.animate([
-        { transform: 'translate(0,0) rotate(0)', opacity: 1 },
-        { transform: `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist + 240}px) rotate(${Math.random() * 720}deg)`, opacity: 0 },
-      ], { duration: 1200 + Math.random() * 800, easing: 'cubic-bezier(.2,.8,.3,1)' }).onfinish = () => p.remove();
-    }
-  }
-
   // ---------- Toast --------------------------------------------------------
   let toastTimer;
   function toast(msg, type = '') {
@@ -610,7 +644,7 @@
     t.textContent = msg;
     t.className = `toast show ${type}`;
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
   }
 
   // ---------- Ciclo de mudança --------------------------------------------
@@ -629,6 +663,7 @@
     Object.keys(EMPTY_ITEMS).forEach((n) => renderList(n));
     renderTags();
     renderChips('#objetivo-sugestoes', OBJ_SUGESTOES);
+    syncDocColorUI();
     renderPreview();
   }
 
@@ -636,6 +671,23 @@
   function bindEvents() {
     const form = $('#cv-form');
     form.addEventListener('submit', (e) => e.preventDefault());
+
+    // Alternância de cor do documento (na barra da prévia e na etapa final)
+    document.addEventListener('click', (e) => {
+      const colorBtn = e.target.closest('[data-doc-color-btn]');
+      if (colorBtn) {
+        setDocColor(colorBtn.dataset.docColorBtn);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && e.target.matches('.doc-color-card[data-doc-color-btn]')) {
+        e.preventDefault();
+        const next = state.corDoc === 'preto' ? 'azul' : 'preto';
+        setDocColor(next);
+        $(`.doc-color-card[data-doc-color-btn="${next}"]`)?.focus();
+      }
+    });
 
     form.addEventListener('input', (e) => {
       const el = e.target;
@@ -735,26 +787,28 @@
     $('#btn-reset-filename')?.addEventListener('click', () => {
       customFilenameTouched = false;
       updateFilenameUI();
-      toast('Nome redefinido para o padrão automático', 'success');
+      toast('Nome do arquivo restaurado para o padrão.', 'success');
     });
 
     $('#btn-example').addEventListener('click', () => {
       customFilenameTouched = false;
-      state = JSON.parse(JSON.stringify(EXAMPLE));
+      const corAtual = state.corDoc === 'preto' ? 'preto' : 'azul';
+      state = { ...JSON.parse(JSON.stringify(EXAMPLE)), corDoc: corAtual };
       renderAll();
       $$('.field.invalid').forEach((f) => f.classList.remove('invalid'));
       save();
-      toast('Exemplo carregado — edite à vontade!', 'success');
+      toast('Dados de exemplo preenchidos — fique à vontade para editar.', 'success');
       if (current === steps.length - 1) updateScore();
     });
     $('#btn-clear').addEventListener('click', () => {
       if (!confirm('Apagar todas as informações preenchidas?')) return;
       customFilenameTouched = false;
-      state = blankState();
+      const corAtual = state.corDoc === 'preto' ? 'preto' : 'azul';
+      state = { ...blankState(), corDoc: corAtual };
       renderAll();
       save();
       goTo(0);
-      toast('Formulário limpo.');
+      toast('Todos os campos foram limpos.');
     });
 
     $('#zoom-in').addEventListener('click', () => { zoom = Math.min(1.5, +((zoom ?? fitZoom()) + 0.1).toFixed(2)); applyZoom(); });
